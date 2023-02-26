@@ -120,4 +120,92 @@
   <data name="root_modDescription" xml:space="preserve">
     <value>Adds 7 extra zones to the game, that can be customizable.</value>
   </data>
+  <data name="ZM_DEFAULT_ZONE_TITLE" xml:space="preserve">
+    <value>Zone #{0}</value>
+  </data>
+  <data name="ZM_ZONE_DESC_Z1" xml:space="preserve">
+    <value>First configurable zone from Custom Zone Mixer Mod.
+Currently supports:
+</value>
+  </data>
+  <data name="ZM_ZONE_DESC_Z2" xml:space="preserve">
+    <value>Second configurable zone from Custom Zone Mixer Mod.
+Currently supports:
+</value>
+  </data>
+  <data name="ZM_ZONE_DESC_Z3" xml:space="preserve">
+    <value>Third configurable zone from Custom Zone Mixer Mod.
+Currently supports:
+</value>
+  </data>
+  <data name="ZM_ZONE_DESC_Z4" xml:space="preserve">
+    <value>Fourth configurable zone from Custom Zone Mixer Mod.
+Currently supports:
+</value>
+  </data>
+  <data name="ZM_ZONE_DESC_Z5" xml:space="preserve">
+    <value>Fifth configurable zone from Custom Zone Mixer Mod.
+Currently supports:
+</value>
+  </data>
+  <data name="ZM_ZONE_DESC_Z6" xml:space="preserve">
+    <value>Sixth configurable zone from Custom Zone Mixer Mod.
+Currently supports:
+</value>
+  </data>
+  <data name="ZM_ZONE_DESC_Z7" xml:space="preserve">
+    <value>Seventh configurable zone from Custom Zone Mixer Mod.
+Currently supports:
+</value>
+  </data>
+  <data name="ZM_EXPORT_DEFAULT_BTN" xml:space="preserve">
+    <value>Export as Default</value>
+  </data>
+  <data name="ZM_IMPORT_DEFAULT_BTN" xml:space="preserve">
+    <value>Import Defaults</value>
+  </data>
+  <data name="ZM_RESET_BTN" xml:space="preserve">
+    <value>Use mod defaults</value>
+  </data>
+  <data name="ZM_ERROR_LOADING_DEFAULTS_TITLE" xml:space="preserve">
+    <value>Error loading defaults</value>
+  </data>
+  <data name="ZM_ERROR_LOADING_DEFAULTS_MESSAGE" xml:space="preserve">
+    <value>The file with default configurations (at &lt;color #FFFF00&gt;{0}&lt;/color&gt;) seems to be corrupted. This error was thrown while trying to load it:
+
+&lt;color=#FF0000&gt;{1} - {2}
+
+{3}&lt;/color&gt;
+
+If you think this is a mod problem, please take a print of this window and post it at mod page.</value>
+  </data>
+  <data name="ZM_OK_BUTTON" xml:space="preserve">
+    <value>Okay...</value>
+  </data>
+  <data name="ZM_OPEN_FOLDER_ON_EXPLORER_BUTTON" xml:space="preserve">
+    <value>Open folder in explorer</value>
+  </data>
+  <data name="ZM_GO_TO_MOD_PAGE_BUTTON" xml:space="preserve">
+    <value>Go to mod page at Workshop</value>
+  </data>
+  <data name="ZM_GHOST_MODE_OPTION" xml:space="preserve">
+    <value>Clean this mod from a savegame.</value>
+  </data>
+  <data name="ZM_GHOST_MODE_OPTION_TOOLTIP" xml:space="preserve">
+    <value>Load a city once with this enabled to be able to play that city without this mod.</value>
+  </data>
+  <data name="ZM_GHOST_MODE_MODAL_TITLE" xml:space="preserve">
+    <value>Removal applied!</value>
+  </data>
+  <data name="ZM_GHOST_MODE_MODAL_MESSAGE" xml:space="preserve">
+    <value>All extra zones were successfully removed from this city. Now, it's safe to save this city and play it without this mod. Rules applied:
+
+&lt;color=#FFFF00&gt;	-All zones with a building were painted with the building zone default type
+	-All marked but not built zones were marked as one of their allowed zones in precedence order Res -&gt; Com -&gt; Ind -&gt; Off (low density first too)&lt;/color&gt;
+
+&lt;color #FF0000&gt;NOTE THAT IS NOT SAFE TO CONTINUE PLAYING THIS CITY BEFORE SAVING IT, DISABLING THIS MOD, REBOOTING THE GAME AND LOADING THE CITY AGAIN!&lt;/color&gt;</value>
+  </data>
+  <data name="czm_copyToClipboard" xml:space="preserve">
+    <value>Copy to clipboard</value>
+  </data>
 </root>
