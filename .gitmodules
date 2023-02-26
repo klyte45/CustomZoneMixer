@@ -1,0 +1,3 @@
+[submodule "KwyttoUtilityCZM/Kwytto"]
+	path = KwyttoUtilityCZM/Kwytto
+	url = https://github.com/klyte45/KwyttoUtility.git
