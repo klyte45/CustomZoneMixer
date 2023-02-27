@@ -18,8 +18,6 @@ namespace CustomZoneMixer.Data
 
     public class CustomZoneData : DataExtensionBase<CustomZoneData>
     {
-        public static event Action EventAllChanged;
-        public static event Action<int> EventOneChanged;
         internal static readonly Func<Locale, Dictionary<Locale.Key, string>> m_localeStringsDictionary = ReflectionUtils.GetGetFieldDelegate<Locale, Dictionary<Locale.Key, string>>(typeof(Locale).GetField("m_LocalizedStrings", RedirectorUtils.allFlags));
         internal static readonly Func<LocaleManager, Locale> m_localeManagerLocale = ReflectionUtils.GetGetFieldDelegate<LocaleManager, Locale>(typeof(LocaleManager).GetField("m_Locale", RedirectorUtils.allFlags));
 
@@ -40,10 +38,11 @@ namespace CustomZoneMixer.Data
             Z5 = new ZoneItem(5, 0b10110000);
             Z6 = new ZoneItem(6, 0b11000000);
             Z7 = new ZoneItem(7, 0b01110000);
-            EventAllChanged?.Invoke();
+            CZMController.SetDirty();
         }
 
         public void SaveAsDefault() => File.WriteAllBytes(CZMController.DEFAULT_CONFIG_FILE, Serialize());
+        public static void LoadDefaults() => Instance = Instance.LoadDefaults(null) ?? Instance;
         public override CustomZoneData LoadDefaults(ISerializableData serializableData)
         {
             if (File.Exists(CZMController.DEFAULT_CONFIG_FILE))
@@ -60,7 +59,7 @@ namespace CustomZoneMixer.Data
                         Z5 = defaultData.Z5;
                         Z6 = defaultData.Z6;
                         Z7 = defaultData.Z7;
-                        EventAllChanged?.Invoke();
+                        CZMController.SetDirty();
                         return result;
                     }
                 }
@@ -122,6 +121,14 @@ namespace CustomZoneMixer.Data
         [XmlElement] public ZoneItem Z6 { get => m_z6; set => SetZ(ref m_z6, value ?? m_z6); }
         [XmlElement] public ZoneItem Z7 { get => m_z7; set => SetZ(ref m_z7, value ?? m_z7); }
 
+        [XmlAttribute]
+        public uint ResidentialDensityElevationFactor = 60;
+
+        [XmlAttribute]
+        public uint CommercialDensityElevationFactor = 60;
+        [XmlAttribute]
+        public uint SimilarityThresold = 15;
+
         public ZoneItem this[int idx]
         {
             get
@@ -156,8 +163,11 @@ namespace CustomZoneMixer.Data
             public ZoneItem(int zoneNumber, byte config)
             {
                 m_zoneNumber = zoneNumber;
-                ZoneConfig = config;
-                ZoneName = null;
+                m_zoneConfig = config;
+                m_zoneName = null;
+                UpdateZoneName();
+                UpdateZoneConfig();
+                CZMController.SetDirty();
             }
 
             [XmlAttribute("zoneNumber")]
@@ -173,9 +183,12 @@ namespace CustomZoneMixer.Data
 
                 set
                 {
-                    m_zoneName = value;
-                    UpdateZoneName();
-                    EventOneChanged?.Invoke(m_zoneNumber);
+                    if (m_zoneName != value)
+                    {
+                        m_zoneName = value.TrimToNull();
+                        UpdateZoneName();
+                        CZMController.SetDirty();
+                    }
                 }
             }
 
@@ -183,7 +196,7 @@ namespace CustomZoneMixer.Data
             private static void SetLocaleEntry(Locale.Key key, string value) => m_localeStringsDictionary(m_localeManagerLocale(LocaleManager.instance))[key] = value;
 
             public void UpdateZoneName()
-            { 
+            {
                 SetLocaleEntry(new ColossalFramework.Globalization.Locale.Key
                 {
                     m_Identifier = "ZONING_TITLE",
@@ -197,9 +210,12 @@ namespace CustomZoneMixer.Data
                 get => m_zoneConfig;
                 set
                 {
-                    m_zoneConfig = value;
-                    UpdateZoneConfig();
-                    EventOneChanged?.Invoke(m_zoneNumber);
+                    if (m_zoneConfig != value)
+                    {
+                        m_zoneConfig = value;
+                        UpdateZoneConfig();
+                        CZMController.SetDirty();
+                    }
                 }
             }
 

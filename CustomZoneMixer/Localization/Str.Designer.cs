@@ -70,6 +70,45 @@ namespace CustomZoneMixer.Localization {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Demand at district.
+        /// </summary>
+        internal static string czm_demandAtDistrict {
+            get {
+                return ResourceManager.GetString("czm_demandAtDistrict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Margin to consider as same
+        ///(all zones with &lt;color=yellow&gt;density &gt; max - margin&lt;/color&gt; will be randomized).
+        /// </summary>
+        internal static string czm_thresoldConsiderEquals {
+            get {
+                return ResourceManager.GetString("czm_thresoldConsiderEquals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Minimum demand to use High Commercial
+        ///(if both Com. densities selected).
+        /// </summary>
+        internal static string czm_thresoldForComHigh {
+            get {
+                return ResourceManager.GetString("czm_thresoldForComHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Minimum demand to use High Residential
+        ///(if both Res. densities selected).
+        /// </summary>
+        internal static string czm_thresoldForResHigh {
+            get {
+                return ResourceManager.GetString("czm_thresoldForResHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Adds 7 extra zones to the game, that can be customizable..
         /// </summary>
         internal static string root_modDescription {

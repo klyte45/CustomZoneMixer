@@ -208,4 +208,19 @@ If you think this is a mod problem, please take a print of this window and post 
   <data name="czm_copyToClipboard" xml:space="preserve">
     <value>Copy to clipboard</value>
   </data>
+  <data name="czm_demandAtDistrict" xml:space="preserve">
+    <value>Demand at district</value>
+  </data>
+  <data name="czm_thresoldConsiderEquals" xml:space="preserve">
+    <value>Margin to consider as same
+(all zones with &lt;color=yellow&gt;density &gt; max - margin&lt;/color&gt; will be randomized)</value>
+  </data>
+  <data name="czm_thresoldForComHigh" xml:space="preserve">
+    <value>Minimum demand to use High Commercial
+(if both Com. densities selected)</value>
+  </data>
+  <data name="czm_thresoldForResHigh" xml:space="preserve">
+    <value>Minimum demand to use High Residential
+(if both Res. densities selected)</value>
+  </data>
 </root>

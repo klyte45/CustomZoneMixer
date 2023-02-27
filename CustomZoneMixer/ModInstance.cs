@@ -1,11 +1,12 @@
 ﻿using CustomZoneMixer.Localization;
 using Kwytto.Interfaces;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
 [assembly: AssemblyVersion("2.0.0.*")]
-namespace CustomZoneMixer 
+namespace CustomZoneMixer
 {
     public class ModInstance : BasicIUserMod<ModInstance, CZMController>
     {
@@ -22,5 +23,17 @@ namespace CustomZoneMixer
         {
             Str.Culture = culture;
         }
+
+        private IUUIButtonContainerPlaceholder[] cachedUUI;
+        public override IUUIButtonContainerPlaceholder[] UUIButtons => cachedUUI ?? (cachedUUI = new IUUIButtonContainerPlaceholder[]
+        {
+            new UUIWindowButtonContainerPlaceholder(
+             buttonName: $"{SimpleName}",
+             tooltip: $"{SimpleName}",
+             iconPath: "ModIcon_btn",
+             windowGetter: ()=>CZMGUI.Instance,
+             shallShowButton: ()=>true
+             ),
+        }.Where(x => x != null).ToArray());
     }
 }

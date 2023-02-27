@@ -20,6 +20,9 @@ namespace CustomZoneMixer
     {
         public static bool m_ghostMode;
 
+        private static bool m_dirtyZonePanel = false;
+
+        private readonly List<GameObject> refGOs = new List<GameObject>();
         protected override void StartActions()
         {
 
@@ -151,6 +154,27 @@ namespace CustomZoneMixer
                 LogUtils.FlushBuffer();
 
                 GameObject.FindObjectOfType<ZoningPanel>().RefreshPanel();
+
+                refGOs.Add(GameObjectUtils.CreateElement<CZMGUI>(UIView.GetAView().gameObject.transform, "CZMGUI").gameObject);
+            }
+        }
+
+        public void OnDestroy()
+        {
+            foreach (GameObject go in refGOs)
+            {
+                Destroy(go);
+            }
+        }
+
+        public static void SetDirty() => m_dirtyZonePanel = true;
+
+        private void FixedUpdate()
+        {
+            if (m_dirtyZonePanel)
+            {
+                GameObject.FindObjectOfType<ZoningPanel>()?.RefreshPanel();
+                m_dirtyZonePanel = false;
             }
         }
 

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnityEngine;
 using static CustomZoneMixer.Data.CustomZoneData;
 using static TerrainManager;
 
@@ -114,7 +113,7 @@ namespace CustomZoneMixer.Overrides
                     });
 
             }
-            typeof(ZoningPanel).GetField("kZones", RedirectorUtils.allFlags).SetValue(null, enumTypes.ToArray());           
+            typeof(ZoningPanel).GetField("kZones", RedirectorUtils.allFlags).SetValue(null, enumTypes.ToArray());
 
         }
         public static void GenPanelSpawnEntryPre(ref string tooltip, ref string thumbnail, ref UITextureAtlas atlas, ref UIComponent tooltipBox)
@@ -203,23 +202,23 @@ namespace CustomZoneMixer.Overrides
                 case ItemClass.Zone.CommercialHigh: return GetDistrictHComDemand(district, instance2, instance);
                 case ItemClass.Zone.Industrial: return GetDistrictIndtDemand(district, instance2, instance);
                 case ItemClass.Zone.Office: return GetDistrictOffcDemand(district, instance2, instance);
-                case (ItemClass.Zone)8: return GetHighestDemand(ref zone, district, instance2, instance);
-                case (ItemClass.Zone)9: return GetHighestDemand(ref zone, district, instance2, instance);
-                case (ItemClass.Zone)10: return GetHighestDemand(ref zone, district, instance2, instance);
-                case (ItemClass.Zone)11: return GetHighestDemand(ref zone, district, instance2, instance);
-                case (ItemClass.Zone)12: return GetHighestDemand(ref zone, district, instance2, instance);
-                case (ItemClass.Zone)13: return GetHighestDemand(ref zone, district, instance2, instance);
-                case (ItemClass.Zone)14: return GetHighestDemand(ref zone, district, instance2, instance);
+                case (ItemClass.Zone)8: return CalculateDemand(ref zone, district, instance2, instance);
+                case (ItemClass.Zone)9: return CalculateDemand(ref zone, district, instance2, instance);
+                case (ItemClass.Zone)10: return CalculateDemand(ref zone, district, instance2, instance);
+                case (ItemClass.Zone)11: return CalculateDemand(ref zone, district, instance2, instance);
+                case (ItemClass.Zone)12: return CalculateDemand(ref zone, district, instance2, instance);
+                case (ItemClass.Zone)13: return CalculateDemand(ref zone, district, instance2, instance);
+                case (ItemClass.Zone)14: return CalculateDemand(ref zone, district, instance2, instance);
                 default: return 0;
             };
         }
 
-        private static int GetDistrictLComDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualCommercialDemand + instance2.m_districts.m_buffer[district].CalculateCommercialLowDemandOffset();
-        private static int GetDistrictLResDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualResidentialDemand + instance2.m_districts.m_buffer[district].CalculateResidentialLowDemandOffset();
-        private static int GetDistrictHComDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualCommercialDemand + instance2.m_districts.m_buffer[district].CalculateCommercialHighDemandOffset();
-        private static int GetDistrictHResDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualResidentialDemand + instance2.m_districts.m_buffer[district].CalculateResidentialHighDemandOffset();
-        private static int GetDistrictOffcDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualWorkplaceDemand + instance2.m_districts.m_buffer[district].CalculateOfficeDemandOffset();
-        private static int GetDistrictIndtDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualWorkplaceDemand + instance2.m_districts.m_buffer[district].CalculateIndustrialDemandOffset();
+        internal static int GetDistrictLComDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualCommercialDemand + instance2.m_districts.m_buffer[district].CalculateCommercialLowDemandOffset();
+        internal static int GetDistrictLResDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualResidentialDemand + instance2.m_districts.m_buffer[district].CalculateResidentialLowDemandOffset();
+        internal static int GetDistrictHComDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualCommercialDemand + instance2.m_districts.m_buffer[district].CalculateCommercialHighDemandOffset();
+        internal static int GetDistrictHResDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualResidentialDemand + instance2.m_districts.m_buffer[district].CalculateResidentialHighDemandOffset();
+        internal static int GetDistrictOffcDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualWorkplaceDemand + instance2.m_districts.m_buffer[district].CalculateOfficeDemandOffset();
+        internal static int GetDistrictIndtDemand(byte district, DistrictManager instance2, ZoneManager instance) => instance.m_actualWorkplaceDemand + instance2.m_districts.m_buffer[district].CalculateIndustrialDemandOffset();
 
         public static readonly ItemClass.Zone[] ZONES_TO_CHECK = new ItemClass.Zone[]
         {
@@ -241,20 +240,53 @@ namespace CustomZoneMixer.Overrides
         new Func<byte, DistrictManager, ZoneManager, int>(GetDistrictOffcDemand),
         };
 
-        private static int GetHighestDemand(ref ItemClass.Zone zone, byte district, DistrictManager instance2, ZoneManager instance)
+        private static int CalculateDemand(ref ItemClass.Zone zone, byte district, DistrictManager instance2, ZoneManager instance)
         {
             ZoneItem zi = CustomZoneData.Instance[zone];
-            int[] demands = new int[ZONES_TO_CHECK.Length];
+            var demands = new List<Tuple<ItemClass.Zone, int>>();
             for (int i = 0; i < ZONES_TO_CHECK.Length; i++)
             {
                 if (zi.HasZone(ZONES_TO_CHECK[i]))
                 {
-                    demands[i] = m_zonesDemandFunctions[i](district, instance2, instance);
+                    demands.Add(Tuple.New(ZONES_TO_CHECK[i], m_zonesDemandFunctions[i](district, instance2, instance)));
                 }
             }
-            int maxVal = demands.Max();
-            int maxIdx = Array.IndexOf(demands, maxVal);
-            zone = (ItemClass.Zone)(2 + maxIdx);
+            int maxVal = demands.Max(x => x.Second);
+            var classifiedZones = demands.Where(x => maxVal - x.Second <= CustomZoneData.Instance.SimilarityThresold).ToList();
+            if (classifiedZones.Count == 0 || maxVal == 0)
+            {
+                zone = ItemClass.Zone.Unzoned;
+                return 0;
+            }
+            if (classifiedZones.Count == 1)
+            {
+                zone = classifiedZones[0].First;
+                return maxVal;
+            }
+            var zonesAvailable = classifiedZones.Select(x => x.First);
+            if (zonesAvailable.Intersect(new ItemClass.Zone[] { ItemClass.Zone.ResidentialLow, ItemClass.Zone.ResidentialHigh }).Count() == 2)
+            {
+                if (maxVal >= CustomZoneData.Instance.ResidentialDensityElevationFactor)
+                {
+                    classifiedZones.RemoveAll(x => x.First == ItemClass.Zone.ResidentialLow);
+                }
+                else
+                {
+                    classifiedZones.RemoveAll(x => x.First == ItemClass.Zone.ResidentialHigh);
+                }
+            }
+            if (zonesAvailable.Intersect(new ItemClass.Zone[] { ItemClass.Zone.CommercialLow, ItemClass.Zone.CommercialHigh }).Count() == 2)
+            {
+                if (maxVal >= CustomZoneData.Instance.CommercialDensityElevationFactor)
+                {
+                    classifiedZones.RemoveAll(x => x.First == ItemClass.Zone.CommercialLow);
+                }
+                else
+                {
+                    classifiedZones.RemoveAll(x => x.First == ItemClass.Zone.CommercialHigh);
+                }
+            }
+            zone = classifiedZones[SimulationManager.instance.m_randomizer.Int32((uint)classifiedZones.Count)].First;
             return maxVal;
         }
 
@@ -343,25 +375,6 @@ namespace CustomZoneMixer.Overrides
                         new CodeInstruction(OpCodes.Ldloc_S, locIdx ),
                         new CodeInstruction(OpCodes.Call, typeof(CustomZoneMixerOverrides).GetMethod("GetCurrentDemandFor") ),
                         new CodeInstruction(OpCodes.Stloc_S, 10 - deltaResult),
-                        //new CodeInstruction(OpCodes.Ldstr, "LOGGING ZONE! district: {0} - demand: {1} - zone: {2}" ),
-                        //new CodeInstruction(OpCodes.Ldc_I4_3),
-                        //new CodeInstruction(OpCodes.Newarr, typeof(object)),
-                        //new CodeInstruction(OpCodes.Dup),
-                        //new CodeInstruction(OpCodes.Ldc_I4_0),
-                        //new CodeInstruction(OpCodes.Ldloc_S, 9 ),
-                        //new CodeInstruction(OpCodes.Box,typeof(byte) ),
-                        //new CodeInstruction(OpCodes.Stelem_Ref ),
-                        //new CodeInstruction(OpCodes.Dup),
-                        //new CodeInstruction(OpCodes.Ldc_I4_1),
-                        //new CodeInstruction(OpCodes.Ldloc_S, 10 ),
-                        //new CodeInstruction(OpCodes.Box,typeof(int) ),
-                        //new CodeInstruction(OpCodes.Stelem_Ref ),
-                        //new CodeInstruction(OpCodes.Dup),
-                        //new CodeInstruction(OpCodes.Ldc_I4_2),
-                        //new CodeInstruction(OpCodes.Ldloc_S, 6 ),
-                        //new CodeInstruction(OpCodes.Box,typeof(ItemClass.Zone) ),
-                        //new CodeInstruction(OpCodes.Stelem_Ref ),
-                        //new CodeInstruction(OpCodes.Call, typeof(LogUtils).GetMethod("DoLog") ),
                         new CodeInstruction(OpCodes.Br, postSwitch)
                     });
                     idxFound = i;
