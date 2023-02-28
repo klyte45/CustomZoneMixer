@@ -1,4 +1,6 @@
-﻿using CustomZoneMixer.Localization;
+﻿using ColossalFramework.UI;
+using CustomZoneMixer.Localization;
+using CustomZoneMixer.Overrides;
 using Kwytto.Interfaces;
 using System.Globalization;
 using System.Linq;
@@ -35,5 +37,20 @@ namespace CustomZoneMixer
              shallShowButton: ()=>true
              ),
         }.Where(x => x != null).ToArray());
+
+        public override void TopSettingsUI(UIHelper ext)
+        {
+            base.TopSettingsUI(ext);
+            var ghostModeChk = ext.AddCheckbox(Str.ZM_GHOST_MODE_OPTION, CZMController.m_ghostMode, (x) =>
+            {
+                CZMController.m_ghostMode = x;
+                CustomZoneMixerOverrides.FixZonePanel();
+            }) as UICheckBox;
+            ghostModeChk.tooltip = Str.ZM_GHOST_MODE_OPTION_TOOLTIP;
+            if (SimulationManager.exists && SimulationManager.instance.m_metaData != null)
+            {
+                ghostModeChk.Disable();
+            }
+        }
     }
 }
