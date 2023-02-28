@@ -1,0 +1,15 @@
+<color=green>Custom Zone Mixer 2</color>
+
+- Restored all features lost in previous games updates
+- Mod now requires UnifiedUI (UUI)
+- Mod button moved to UUI (It's the Z logo in light red color)
+- Added threshold to decide when to use high or low density, if a custom zone support both for Residential or Commercial
+==> If the district demand gets <color=yellow>Greater or Equal</color>, the high density will be used; low density otherwise.
+==> Doesn't affects custom zones that only support one of them (the supported will be used in any case)
+==> Defaults to <color=yellow>60</color>
+- Added threshold to consider that a demand not equal to the major demand of the district can be considered equals to the major value.
+==>EX: If the major demand is 100 and the threshold is 15, all zones with demand value AT LEAST equal to 85 will be randomized to know which one to use.
+==>Defaults to <color=yellow>15</color>
+- Added an information content in the bottom of the mod options screen showing the demand of each zone in each district and in the whole city.
+==>The values there are used by the mod to determine which construction type is being demanded. Can vary from -100 to +100.
+==>If a demand is below 0, it won't grow buildings in the district

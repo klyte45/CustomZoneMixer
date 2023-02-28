@@ -28,11 +28,6 @@ namespace CustomZoneMixer.Overrides
             AddRedirect(typeof(GeneratedScrollPanel).GetMethod("SpawnEntry", RedirectorUtils.allFlags), typeof(CustomZoneMixerOverrides).GetMethod("GenPanelSpawnEntryPre", RedirectorUtils.allFlags));
             CustomZoneMixerOverrides.FixZonePanel();
 
-            if (ModInstance.DebugMode)
-            {
-                AddRedirect(typeof(BuildingManager).GetMethod("ReleaseBuilding"), typeof(CustomZoneMixerOverrides).GetMethod("LogStacktrace"));
-            }
-
             foreach (Type zoneType in Get81TilesFakeZoneBlockTypes())
             {
                 LogUtils.DoWarnLog("Patching 81 tiles");

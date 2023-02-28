@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-[assembly: AssemblyVersion("2.0.0.*")]
+[assembly: AssemblyVersion("2.0.0.0")]
 namespace CustomZoneMixer
 {
     public class ModInstance : BasicIUserMod<ModInstance, CZMController>

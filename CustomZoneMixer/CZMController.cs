@@ -1,12 +1,10 @@
 ﻿using ColossalFramework;
-using ColossalFramework.Math;
 using ColossalFramework.UI;
 using CustomZoneMixer.Localization;
 using CustomZoneMixer.Overrides;
 using Kwytto.Interfaces;
 using Kwytto.LiteUI;
 using Kwytto.Utils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,53 +26,32 @@ namespace CustomZoneMixer
 
             if (m_ghostMode)
             {
+                Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
 
                 for (ushort a = 1; a < BuildingManager.instance.m_buildings.m_buffer.Length; a++)
                 {
-                    if (BuildingManager.instance.m_buildings.m_buffer[a].Info.m_buildingAI is PrivateBuildingAI)
+                    ref Building building = ref BuildingManager.instance.m_buildings.m_buffer[a];
+                    if (building.Info.m_buildingAI is PrivateBuildingAI)
                     {
-                        Vector3 position = BuildingManager.instance.m_buildings.m_buffer[a].m_position;
-                        int num = Mathf.Max((int)((position.x - 35f) / 64f + 135f), 0);
-                        int num2 = Mathf.Max((int)((position.z - 35f) / 64f + 135f), 0);
-                        int num3 = Mathf.Min((int)((position.x + 35f) / 64f + 135f), 269);
-                        int num4 = Mathf.Min((int)((position.z + 35f) / 64f + 135f), 269);
-                        Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
-                        ushort[] buildingGrid = Singleton<BuildingManager>.instance.m_buildingGrid;
-                        for (int i = num2; i <= num4; i++)
+                        LogUtils.DoInfoLog($"[Building {a}/{buildings.m_buffer.Length}] Cleaning");
+
+                        Building.Flags flags = building.m_flags;
+                        if ((flags & (Building.Flags.Created | Building.Flags.Deleted | Building.Flags.Demolishing | Building.Flags.Collapsed)) == Building.Flags.Created)
                         {
-                            for (int j = num; j <= num3; j++)
+                            BuildingInfo info = building.Info;
+                            if (info != null && info.m_placementStyle == ItemClass.Placement.Automatic)
                             {
-                                ushort num5 = buildingGrid[i * 270 + j];
-                                int num6 = 0;
-                                while (num5 != 0)
+                                ItemClass.Zone zone = info.m_class.GetZone();
+                                ItemClass.Zone secondaryZone = info.m_class.GetSecondaryZone();
+                                if (zone != ItemClass.Zone.None)
                                 {
-                                    ushort nextGridBuilding = buildings.m_buffer[num5].m_nextGridBuilding;
-                                    Building.Flags flags = buildings.m_buffer[num5].m_flags;
-                                    if ((flags & (Building.Flags.Created | Building.Flags.Deleted | Building.Flags.Demolishing | Building.Flags.Collapsed)) == Building.Flags.Created)
-                                    {
-                                        BuildingInfo info = buildings.m_buffer[num5].Info;
-                                        if (info != null && info.m_placementStyle == ItemClass.Placement.Automatic)
-                                        {
-                                            ItemClass.Zone zone = info.m_class.GetZone();
-                                            ItemClass.Zone secondaryZone = info.m_class.GetSecondaryZone();
-                                            if (zone != ItemClass.Zone.None && VectorUtils.LengthSqrXZ(buildings.m_buffer[num5].m_position - position) <= 1225f)
-                                            {
-                                                buildings.m_buffer[num5].CheckZoning(zone, secondaryZone, true);
-                                            }
-                                        }
-                                    }
-                                    num5 = nextGridBuilding;
-                                    if (++num6 >= 49152)
-                                    {
-                                        CODebugBase<LogChannel>.Error(LogChannel.Core, "Invalid list detected!\n" + Environment.StackTrace);
-                                        break;
-                                    }
+                                    building.CheckZoning(zone, secondaryZone, true);
                                 }
                             }
                         }
-
                     }
                 }
+
 
                 for (ushort i = 1; i < ZoneManager.instance.m_blocks.m_buffer.Length; i++)
                 {
@@ -92,7 +69,7 @@ namespace CustomZoneMixer
                 KwyttoDialog.ShowModal(new BindProperties()
                 {
                     title = Str.ZM_GHOST_MODE_MODAL_TITLE,
-                    message = Str.ZM_GHOST_MODE_MODAL_MESSAGE,
+                    scrollText = Str.ZM_GHOST_MODE_MODAL_MESSAGE,
                     buttons = KwyttoDialog.basicOkButtonBar
                 });
             }

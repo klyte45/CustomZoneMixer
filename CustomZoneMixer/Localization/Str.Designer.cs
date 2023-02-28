@@ -127,7 +127,7 @@ namespace CustomZoneMixer.Localization {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a The file with default configurations (at &lt;color #FFFF00&gt;{0}&lt;/color&gt;) seems to be corrupted. This error was thrown while trying to load it:
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The file with default configurations (at &lt;color=#FFFF00&gt;{0}&lt;/color&gt;) seems to be corrupted. This error was thrown while trying to load it:
         ///
         ///&lt;color=#FF0000&gt;{1} - {2}
         ///
@@ -162,10 +162,13 @@ namespace CustomZoneMixer.Localization {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a All extra zones were successfully removed from this city. Now, it&apos;s safe to save this city and play it without this mod. Rules applied:
         ///
-        ///&lt;color=#FFFF00&gt;	-All zones with a building were painted with the building zone default type
-        ///	-All marked but not built zones were marked as one of their allowed zones in precedence order Res -&gt; Com -&gt; Ind -&gt; Off (low density first too)&lt;/color&gt;
+        ///&lt;color=#FFFF00&gt;
+        ///-All zones with a building were painted with the building zone default type
+        ///-All marked but not built zones were marked as one of their allowed zones in precedence order Res -&gt; Com -&gt; Ind -&gt; Off (low density first too)&lt;/color&gt;
         ///
-        ///&lt;color #FF0000&gt;NOTE THAT IS NOT SAFE TO CONTINUE PLAYING THIS CITY BEFORE SAVING IT, DISABLING THIS MOD, REBOOTING THE GAME AND LO [o restante da cadeia de caracteres foi truncado]&quot;;.
+        ///
+        ///
+        ///&lt;color=#FF0000&gt;NOTE THAT IS NOT SAFE TO CONTINUE PLAYING THIS CITY BEFORE SAVING IT, DISABLING THIS MOD, REBOOTING THE GAME A [o restante da cadeia de caracteres foi truncado]&quot;;.
         /// </summary>
         internal static string ZM_GHOST_MODE_MODAL_MESSAGE {
             get {
@@ -183,7 +186,7 @@ namespace CustomZoneMixer.Localization {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Clean this mod from a savegame..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clean this mod from a savegame. (See tooltip here!).
         /// </summary>
         internal static string ZM_GHOST_MODE_OPTION {
             get {
@@ -192,7 +195,8 @@ namespace CustomZoneMixer.Localization {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Load a city once with this enabled to be able to play that city without this mod..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Load a city once with this enabled to be able to play that city without this mod.
+        ///After loading, you can save the city, close the game, disable this mod and load the savegame again to be safe for playing.
         /// </summary>
         internal static string ZM_GHOST_MODE_OPTION_TOOLTIP {
             get {

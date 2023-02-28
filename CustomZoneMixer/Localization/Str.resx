@@ -171,7 +171,7 @@ Currently supports:
     <value>Error loading defaults</value>
   </data>
   <data name="ZM_ERROR_LOADING_DEFAULTS_MESSAGE" xml:space="preserve">
-    <value>The file with default configurations (at &lt;color #FFFF00&gt;{0}&lt;/color&gt;) seems to be corrupted. This error was thrown while trying to load it:
+    <value>The file with default configurations (at &lt;color=#FFFF00&gt;{0}&lt;/color&gt;) seems to be corrupted. This error was thrown while trying to load it:
 
 &lt;color=#FF0000&gt;{1} - {2}
 
@@ -189,10 +189,11 @@ If you think this is a mod problem, please take a print of this window and post 
     <value>Go to mod page at Workshop</value>
   </data>
   <data name="ZM_GHOST_MODE_OPTION" xml:space="preserve">
-    <value>Clean this mod from a savegame.</value>
+    <value>Clean this mod from a savegame. (See tooltip here!)</value>
   </data>
   <data name="ZM_GHOST_MODE_OPTION_TOOLTIP" xml:space="preserve">
-    <value>Load a city once with this enabled to be able to play that city without this mod.</value>
+    <value>Load a city once with this enabled to be able to play that city without this mod.
+After loading, you can save the city, close the game, disable this mod and load the savegame again to be safe for playing</value>
   </data>
   <data name="ZM_GHOST_MODE_MODAL_TITLE" xml:space="preserve">
     <value>Removal applied!</value>
@@ -200,10 +201,13 @@ If you think this is a mod problem, please take a print of this window and post 
   <data name="ZM_GHOST_MODE_MODAL_MESSAGE" xml:space="preserve">
     <value>All extra zones were successfully removed from this city. Now, it's safe to save this city and play it without this mod. Rules applied:
 
-&lt;color=#FFFF00&gt;	-All zones with a building were painted with the building zone default type
-	-All marked but not built zones were marked as one of their allowed zones in precedence order Res -&gt; Com -&gt; Ind -&gt; Off (low density first too)&lt;/color&gt;
+&lt;color=#FFFF00&gt;
+-All zones with a building were painted with the building zone default type
+-All marked but not built zones were marked as one of their allowed zones in precedence order Res -&gt; Com -&gt; Ind -&gt; Off (low density first too)&lt;/color&gt;
 
-&lt;color #FF0000&gt;NOTE THAT IS NOT SAFE TO CONTINUE PLAYING THIS CITY BEFORE SAVING IT, DISABLING THIS MOD, REBOOTING THE GAME AND LOADING THE CITY AGAIN!&lt;/color&gt;</value>
+
+
+&lt;color=#FF0000&gt;NOTE THAT IS NOT SAFE TO CONTINUE PLAYING THIS CITY BEFORE SAVING IT, DISABLING THIS MOD, REBOOTING THE GAME AND LOADING THE CITY AGAIN!&lt;/color&gt;</value>
   </data>
   <data name="czm_copyToClipboard" xml:space="preserve">
     <value>Copy to clipboard</value>
